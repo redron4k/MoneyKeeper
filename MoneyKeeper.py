@@ -283,15 +283,18 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.load_from_logs()
 
     def load_from_logs(self):
-        file = open("logs.csv", encoding="utf-8")
-        reader = csv.reader(file, delimiter=";", quotechar='\"')
-        for i in reader:
-            if i[0] not in self.data.keys():
-                self.data[i[0]] = [": ".join(i[1:])]
-            else:
-                self.data[i[0]].append(": ".join(i[1:]))
-        file.close()
-        self.onDateChanged()
+        try:
+            file = open("logs.csv", encoding="utf-8")
+            reader = csv.reader(file, delimiter=";", quotechar='\"')
+            for i in reader:
+                if i[0] not in self.data.keys():
+                    self.data[i[0]] = [": ".join(i[1:])]
+                else:
+                    self.data[i[0]].append(": ".join(i[1:]))
+            file.close()
+            self.onDateChanged()
+        except FileNotFoundError:
+            pass
 
     def onDateChanged(self):
         date = self.calendarWidget.selectedDate()
